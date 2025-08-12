@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Check, Utensils, Smartphone, CreditCard, BarChart3, Settings, Globe, Headphones } from "lucide-react";
 import { useEffect } from "react";
+import { Link } from "wouter";
 
 export default function Platform() {
   useEffect(() => {
@@ -52,7 +53,32 @@ export default function Platform() {
     }
   ];
 
+  const scrollToPricing = () => {
+    const pricingSection = document.querySelector("#pricing");
+    if (pricingSection) {
+      pricingSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   const plans = [
+    {
+      name: "Gratis",
+      price: "0",
+      period: "/30 giorni",
+      badge: "Prova gratuita",
+      badgeColor: "bg-green-100 text-green-800",
+      features: [
+        "30 giorni di prova gratuita",
+        "Max 10 prodotti nel menu",
+        "1 template base preimpostato",
+        "Carrello & Checkout abilitati",
+        "Integrazione Stripe base",
+        "Max 50 ordini al mese",
+        "Solo documentazione online",
+        "Hosting con limiti ridotti",
+        "Nessuna carta di credito richiesta"
+      ]
+    },
     {
       name: "Starter",
       price: "19",
@@ -125,16 +151,22 @@ export default function Platform() {
                 senza competenze tecniche
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="bg-white text-primary hover:bg-gray-100 text-lg">
-                  Inizia Gratis
-                </Button>
                 <Button 
                   size="lg" 
-                  variant="outline" 
-                  className="border-2 border-white text-white hover:bg-white hover:text-primary text-lg"
+                  className="bg-white text-primary hover:bg-gray-100 text-lg"
+                  onClick={scrollToPricing}
                 >
-                  Vedi Demo
+                  Inizia Gratis
                 </Button>
+                <Link href="/">
+                  <Button 
+                    size="lg" 
+                    variant="outline" 
+                    className="border-2 border-white text-white hover:bg-white hover:text-primary text-lg"
+                  >
+                    Vedi Demo
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
@@ -218,7 +250,7 @@ export default function Platform() {
         </section>
 
         {/* Pricing Section */}
-        <section className="py-16 bg-white">
+        <section id="pricing" className="py-16 bg-white">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-secondary mb-4">
@@ -229,7 +261,7 @@ export default function Platform() {
               </p>
             </div>
 
-            <div className="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <div className="grid lg:grid-cols-2 xl:grid-cols-4 gap-8 max-w-7xl mx-auto">
               {plans.map((plan, index) => (
                 <Card 
                   key={index} 
@@ -259,9 +291,14 @@ export default function Platform() {
                       ))}
                     </ul>
                     <Button 
-                      className={`w-full mt-6 ${plan.isPopular ? 'bg-primary text-white hover:bg-primary/90' : 'bg-secondary text-white hover:bg-secondary/90'}`}
+                      className={`w-full mt-6 ${
+                        plan.name === "Gratis" ? 'bg-green-600 text-white hover:bg-green-700' :
+                        plan.isPopular ? 'bg-primary text-white hover:bg-primary/90' : 
+                        'bg-secondary text-white hover:bg-secondary/90'
+                      }`}
                     >
-                      {plan.name === "Enterprise" ? "Contattaci" : "Inizia Ora"}
+                      {plan.name === "Enterprise" ? "Contattaci" : 
+                       plan.name === "Gratis" ? "Inizia Prova Gratuita" : "Inizia Ora"}
                     </Button>
                   </CardContent>
                 </Card>
@@ -288,6 +325,7 @@ export default function Platform() {
                 size="lg" 
                 variant="outline" 
                 className="border-2 border-white text-white hover:bg-white hover:text-secondary"
+                onClick={scrollToPricing}
               >
                 Prova Gratuita
               </Button>
