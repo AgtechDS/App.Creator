@@ -26,6 +26,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/platform">
+                  <a className="text-gray-300 hover:text-primary transition-colors">Piattaforma</a>
+                </Link>
+              </li>
+              <li>
                 <a 
                   href="#about" 
                   className="text-gray-300 hover:text-primary transition-colors cursor-pointer"

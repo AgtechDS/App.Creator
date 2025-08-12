@@ -1,8 +1,10 @@
-# Restaurant Menu & Delivery App
+# Restaurant Menu & Delivery App + Platform
 
 ## Overview
 
 This is a full-stack restaurant web application that combines menu browsing, online ordering, and secure payment processing. The app allows customers to browse the restaurant's menu, add items to their cart, and complete orders through Stripe payment integration. It features a responsive design built with React and shadcn/ui components, serving authentic Italian cuisine with delivery service.
+
+Additionally, the application now includes a comprehensive platform presentation page that showcases the business solution for restaurants and bars to create their own delivery applications. This includes detailed subscription plans (Starter €19/month, Pro €49/month, Enterprise custom) and feature comparisons.
 
 ## User Preferences
 
