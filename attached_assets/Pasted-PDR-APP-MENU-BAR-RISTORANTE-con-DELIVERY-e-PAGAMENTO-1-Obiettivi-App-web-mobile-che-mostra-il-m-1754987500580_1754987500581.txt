@@ -1,0 +1,134 @@
+PDR - APP MENU BAR / RISTORANTE con DELIVERY e PAGAMENTO
+1. Obiettivi
+App web/mobile che mostra il menu del bar/ristorante in modo semplice, efficace e responsive.
+
+Permette di aggiungere prodotti al carrello e fare checkout con Stripe.
+
+Home page con presentazione, offerte, contatti, chi siamo, dove siamo.
+
+Menu strutturato con immagini, nome, descrizione, prezzo, e pulsante Aggiungi al carrello.
+
+Filtri per categorie prodotti.
+
+Delivery assicurato (integrazione o info).
+
+Rispetta linee guida Google (SEO base, performance, accessibilità).
+
+2. Funzionalità principali
+HOME PAGE:
+
+Carousel offerte principali (immagini + testo).
+
+Sezione “Chi siamo” + breve descrizione del locale.
+
+Contatti (telefono, email).
+
+Dove siamo (mappa Google o indirizzo).
+
+Eventuale sezione news o promozioni.
+
+MENU:
+
+Visualizzazione prodotti in card con:
+
+Immagine
+
+Nome
+
+Descrizione breve
+
+Prezzo
+
+Pulsante “Aggiungi al carrello”
+
+Filtri per categorie (es: Bevande, Panini, Dolci)
+
+Carousel o lista orizzontale per offerte speciali.
+
+Menu di navigazione con scorciatoie.
+
+CART:
+
+Lista prodotti aggiunti con quantità modificabile.
+
+Totale ordine.
+
+Pulsante “Checkout”.
+
+CHECKOUT:
+
+Modulo inserimento dati cliente (nome, indirizzo, telefono).
+
+Metodo di pagamento con Stripe (Card, Apple Pay se possibile).
+
+Conferma ordine.
+
+3. Tech stack consigliato
+Frontend: React + Tailwind CSS (veloce, modulare, design semplice ma moderno).
+
+Backend (se serve): Node.js/Express o Firebase Functions per gestire ordine e Stripe.
+
+Database: Firebase Firestore o Supabase per prodotti e ordini.
+
+Pagamenti: Stripe API.
+
+Hosting: Vercel o Netlify per frontend, backend serverless o cloud functions.
+
+4. Struttura pagine
+/ Home page
+
+/menu Menu con filtro e aggiungi al carrello
+
+/cart Carrello + checkout
+
+5. UX/UI Design
+Layout mobile first, responsive.
+
+Palette colori semplice (es. bianco, nero, un colore accento tipo arancione o verde).
+
+Font leggibile e pulito.
+
+Bottoni chiari e grandi.
+
+Carousel immagini semplici.
+
+Feedback visivi (es. aggiunta al carrello confermata).
+
+6. Procedura checkout Stripe (semplificata)
+L’utente clicca “Checkout” in cart.
+
+Compare form dati cliente e pagamento.
+
+Invio dati a backend/serverless function.
+
+Backend crea sessione pagamento Stripe e restituisce link.
+
+Redirect utente a Stripe checkout page.
+
+Dopo pagamento successo, utente torna a conferma ordine.
+
+Notifica ordine a backend (mail o DB).
+
+7. Esempio menu test (da inserire)
+Caffè Espresso — €1,00 — classico espresso italiano.
+
+Cappuccino — €1,50 — con latte caldo e schiuma.
+
+Panino Prosciutto e Formaggio — €4,00 — pane fresco con prosciutto cotto e formaggio.
+
+Torta della casa — €3,50 — dolce fatto in casa con ingredienti freschi.
+
+Bibita Gassata — €2,00 — scelta tra Coca-Cola, Fanta, Sprite.
+
+8. Tempi stimati (minimo MVP)
+Setup progetto + hosting: 1 giorno
+
+Creazione homepage + menu base + styling: 2 giorni
+
+Implementazione carrello + stato aggiunte: 1 giorno
+
+Integrazione Stripe checkout: 2 giorni
+
+Testing e bugfix: 1 giorno
+
+Totale: circa 7 giorni di lavoro full-time.
