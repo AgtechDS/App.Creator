@@ -4,10 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Check, Utensils, Smartphone, CreditCard, BarChart3, Settings, Globe, Headphones } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "wouter";
+import { SubscriptionFormModal } from "@/components/subscription-form-modal";
 
 export default function Platform() {
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState("");
+
   useEffect(() => {
     document.title = "Piattaforma per Ristoranti - Bella Vista | Crea la tua App di Delivery";
     
@@ -19,6 +23,11 @@ export default function Platform() {
       );
     }
   }, []);
+
+  const openFormWithPlan = (planName: string) => {
+    setSelectedPlan(planName);
+    setIsFormOpen(true);
+  };
 
   const features = [
     {
@@ -296,6 +305,7 @@ export default function Platform() {
                         plan.isPopular ? 'bg-primary text-white hover:bg-primary/90' : 
                         'bg-secondary text-white hover:bg-secondary/90'
                       }`}
+                      onClick={() => openFormWithPlan(plan.name)}
                     >
                       {plan.name === "Enterprise" ? "Contattaci" : 
                        plan.name === "Gratis" ? "Inizia Prova Gratuita" : "Inizia Ora"}
@@ -334,6 +344,12 @@ export default function Platform() {
         </section>
       </main>
       <Footer />
+      
+      <SubscriptionFormModal 
+        isOpen={isFormOpen}
+        onClose={() => setIsFormOpen(false)}
+        selectedPlan={selectedPlan}
+      />
     </div>
   );
 }

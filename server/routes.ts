@@ -4,12 +4,18 @@ import Stripe from "stripe";
 import { storage } from "./storage";
 import { insertOrderSchema } from "@shared/schema";
 import { z } from "zod";
+import sgMail from "@sendgrid/mail";
 
 if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
 }
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+// Configure SendGrid if API key is available
+if (process.env.SENDGRID_API_KEY) {
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+}
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Get all menu items
@@ -82,6 +88,71 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(order);
     } catch (error: any) {
       res.status(500).json({ message: "Error fetching order: " + error.message });
+    }
+  });
+
+  // Send subscription form via email
+  app.post("/api/send-subscription-form", async (req, res) => {
+    try {
+      const { formData } = req.body;
+      
+      if (!process.env.SENDGRID_API_KEY) {
+        return res.status(500).json({ 
+          message: "Email service not configured. Please contact support directly at agtechdesigne@gmail.com" 
+        });
+      }
+
+      const emailContent = `
+MODULO DI ATTIVAZIONE ABBONAMENTO
+
+=== DATI DEL CLIENTE ===
+Nome e Cognome / Ragione Sociale: ${formData.nomeCompleto}
+Partita IVA / Codice Fiscale: ${formData.partitaIva}
+Email: ${formData.email}
+Telefono: ${formData.telefono}
+
+=== DATI DELL'ATTIVITÀ ===
+Nome del Locale: ${formData.nomeLocale}
+Indirizzo: ${formData.indirizzo || 'Non specificato'}
+Città / CAP: ${formData.cittaCap || 'Non specificato'}
+Sito Web: ${formData.sitoWeb || 'Non specificato'}
+
+=== SCELTA DEL PIANO ===
+Piano Scelto: ${formData.pianoScelto}
+
+=== OPZIONI AGGIUNTIVE ===
+Supporto tecnico prioritario (€9/mese): ${formData.supportoPrioritario ? 'SÌ' : 'NO'}
+Backup giornalieri dedicati (€5/mese): ${formData.backupGiornalieri ? 'SÌ' : 'NO'}
+Dominio personalizzato (€12/anno): ${formData.dominioPersonalizzato ? 'SÌ' : 'NO'}
+
+=== METODO DI PAGAMENTO ===
+Metodo preferito: ${formData.metodoPagamento || 'Non specificato'}
+
+=== NOTE DEL CLIENTE ===
+${formData.note || 'Nessuna nota aggiuntiva'}
+
+=== AUTORIZZAZIONE ===
+Data di invio: ${formData.data}
+Il cliente dichiara di aver preso visione delle condizioni di servizio e di autorizzare l'attivazione del piano scelto.
+      `;
+
+      const msg = {
+        to: 'agtechdesigne@gmail.com',
+        from: 'noreply@bellavista.com', // This should be a verified sender in SendGrid
+        subject: `Nuovo Abbonamento - ${formData.pianoScelto} - ${formData.nomeLocale}`,
+        text: emailContent,
+        html: emailContent.replace(/\n/g, '<br>'),
+      };
+
+      await sgMail.send(msg);
+      
+      res.json({ success: true, message: "Modulo inviato con successo" });
+    } catch (error: any) {
+      console.error('SendGrid error:', error);
+      res.status(500).json({ 
+        message: "Errore nell'invio dell'email. Contatta direttamente agtechdesigne@gmail.com",
+        error: error.message 
+      });
     }
   });
 
