@@ -3,6 +3,65 @@
 @tailwind components;
 @tailwind utilities;
 
+/* CSS Variables for dynamic theming */
+:root {
+  --theme-primary: hsl(25, 95%, 53%);
+  --theme-secondary: hsl(15, 25%, 25%);
+  --theme-accent: hsl(45, 90%, 60%);
+  --theme-background: hsl(30, 15%, 97%);
+  --theme-surface: hsl(0, 0%, 100%);
+  --theme-text: hsl(15, 25%, 15%);
+  --theme-text-secondary: hsl(15, 15%, 45%);
+  --theme-font-heading: "Playfair Display", serif;
+  --theme-font-body: "Source Sans Pro", sans-serif;
+}
+
+/* Dynamic theme classes */
+.theme-bg {
+  background-color: var(--theme-background);
+}
+
+.theme-surface {
+  background-color: var(--theme-surface);
+}
+
+.theme-primary {
+  background-color: var(--theme-primary);
+}
+
+.theme-secondary {
+  background-color: var(--theme-secondary);
+}
+
+.theme-accent {
+  background-color: var(--theme-accent);
+}
+
+.theme-text {
+  color: var(--theme-text);
+}
+
+.theme-text-secondary {
+  color: var(--theme-text-secondary);
+}
+
+.theme-heading {
+  font-family: var(--theme-font-heading);
+}
+
+.theme-body {
+  font-family: var(--theme-font-body);
+}
+
+.theme-border {
+  border-color: var(--theme-primary);
+}
+
+.theme-hover:hover {
+  background-color: var(--theme-primary);
+  color: var(--theme-surface);
+}
+
 :root {
   --background: hsl(0 0% 100%);
   --foreground: hsl(210 25% 7.8431%);
