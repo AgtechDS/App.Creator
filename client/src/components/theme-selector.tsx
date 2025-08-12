@@ -120,19 +120,24 @@ export function ThemeSelector({ isOpen, onClose }: ThemeSelectorProps) {
                       
                       <div className="flex space-x-1">
                         <div 
-                          className="w-4 h-4 rounded-full border"
+                          className="w-5 h-5 rounded-full border-2 border-white shadow-sm"
                           style={{ backgroundColor: theme.colors.primary }}
                           title="Colore primario"
                         />
                         <div 
-                          className="w-4 h-4 rounded-full border"
+                          className="w-5 h-5 rounded-full border-2 border-white shadow-sm"
                           style={{ backgroundColor: theme.colors.secondary }}
                           title="Colore secondario"
                         />
                         <div 
-                          className="w-4 h-4 rounded-full border"
+                          className="w-5 h-5 rounded-full border-2 border-white shadow-sm"
                           style={{ backgroundColor: theme.colors.accent }}
                           title="Colore accent"
+                        />
+                        <div 
+                          className="w-5 h-5 rounded-full border-2 border-white shadow-sm"
+                          style={{ backgroundColor: theme.colors.background }}
+                          title="Colore di sfondo"
                         />
                       </div>
                       

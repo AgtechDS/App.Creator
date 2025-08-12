@@ -13,9 +13,9 @@ export function HeroSection() {
     <section className="relative h-screen flex items-center justify-center overflow-hidden"
              style={{ background: `linear-gradient(135deg, ${currentTheme.colors.primary}20, ${currentTheme.colors.secondary}20)` }}>
       <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000"
         style={{
-          backgroundImage: "url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080')"
+          backgroundImage: `url('${currentTheme.heroImage}')`
         }}
       >
         <div className="absolute inset-0 bg-black bg-opacity-50"></div>
