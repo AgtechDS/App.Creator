@@ -12,9 +12,9 @@ export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navItems = [
+    { href: "/platform", label: "Piattaforma" },
     { href: "/", label: "Home" },
     { href: "/menu", label: "Menu" },
-    { href: "/platform", label: "Piattaforma" },
     { href: "#about", label: "Chi Siamo" },
     { href: "#contact", label: "Contatti" },
   ];
@@ -38,7 +38,7 @@ export function Header() {
             <Link href="/">
               <div className="flex items-center space-x-2 cursor-pointer">
                 <Utensils className="text-primary text-2xl" />
-                <h1 className="text-xl font-bold text-secondary">Bella Vista</h1>
+                <h1 className="text-xl font-bold text-secondary">agxexperience.space</h1>
               </div>
             </Link>
             

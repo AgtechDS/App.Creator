@@ -13,8 +13,8 @@ if (!process.env.STRIPE_SECRET_KEY) {
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 // Configure SendGrid if API key is available
-if (process.env.SENDGRID_API_KEY) {
-  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+if (process.env.SENDGRID_API_EMAIL_KEY) {
+  sgMail.setApiKey(process.env.SENDGRID_API_EMAIL_KEY);
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -96,7 +96,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { formData } = req.body;
       
-      if (!process.env.SENDGRID_API_KEY) {
+      if (!process.env.SENDGRID_API_EMAIL_KEY) {
         return res.status(500).json({ 
           message: "Email service not configured. Please contact support directly at agtechdesigne@gmail.com" 
         });
@@ -136,19 +136,30 @@ Data di invio: ${formData.data}
 Il cliente dichiara di aver preso visione delle condizioni di servizio e di autorizzare l'attivazione del piano scelto.
       `;
 
+      // Send to both admin and customer
       const msg = {
-        to: 'agtechdesigne@gmail.com',
-        from: 'noreply@bellavista.com', // This should be a verified sender in SendGrid
+        to: ['agtechdesigne@gmail.com', formData.email],
+        from: 'app.creator@agxexperience.space',
         subject: `Nuovo Abbonamento - ${formData.pianoScelto} - ${formData.nomeLocale}`,
         text: emailContent,
         html: emailContent.replace(/\n/g, '<br>'),
       };
 
-      await sgMail.send(msg);
+      const result = await sgMail.send(msg);
+      console.log('Email sent result:', result);
       
       res.json({ success: true, message: "Modulo inviato con successo" });
     } catch (error: any) {
-      console.error('SendGrid error:', error);
+      console.error('SendGrid error details:', {
+        message: error.message,
+        code: error.code,
+        response: error.response ? {
+          status: error.response.status,
+          headers: error.response.headers,
+          body: error.response.body
+        } : null,
+        stack: error.stack
+      });
       res.status(500).json({ 
         message: "Errore nell'invio dell'email. Contatta direttamente agtechdesigne@gmail.com",
         error: error.message 

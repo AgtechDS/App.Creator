@@ -13,6 +13,7 @@ export default function Platform() {
   const [selectedPlan, setSelectedPlan] = useState("");
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     document.title = "Piattaforma per Ristoranti - Bella Vista | Crea la tua App di Delivery";
     
     const metaDescription = document.querySelector('meta[name="description"]');
@@ -171,7 +172,7 @@ export default function Platform() {
                   <Button 
                     size="lg" 
                     variant="outline" 
-                    className="border-2 border-white text-white hover:bg-white hover:text-primary text-lg"
+                    className="border-2 border-white text-black hover:bg-white hover:text-primary text-lg"
                   >
                     Vedi Demo
                   </Button>
@@ -335,7 +336,7 @@ export default function Platform() {
                 size="lg" 
                 variant="outline" 
                 className="border-2 border-white text-white hover:bg-white hover:text-secondary"
-                onClick={scrollToPricing}
+                onClick={() => window.open('https://wa.me/393792787795', '_blank')}
               >
                 Prova Gratuita
               </Button>

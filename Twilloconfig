@@ -1,0 +1,44 @@
+Copy code block
+Open code block in new page
+from twilio.rest import Client
+
+account_sid = 'ACfcb28f14d615732cef0bf699e1a5ae14'
+auth_token = '[AuthToken]'
+client = Client(account_sid, auth_token)
+
+message = client.messages.create(
+  from_='whatsapp:+14155238886',
+  content_sid='HX350d429d32e64a552466cafecbe95f3c',
+  content_variables='{"1":"12/1","2":"3pm"}',
+  to='whatsapp:+393792787795'
+)
+
+print(message.sid)
+Response
+
+Copy code block
+201 - CREATED - The request was successful. We created a new resource and the response body contains the representation.
+{
+  "account_sid": "ACfcb28f14d615732cef0bf699e1a5ae14",
+  "api_version": "2010-04-01",
+  "body": "Thank you for your order. Your delivery is scheduled for 12/1 at 3pm. If you need to change it, please reply back and let us know.",
+  "date_created": "Wed, 13 Aug 2025 05:26:29 +0000",
+  "date_sent": null,
+  "date_updated": "Wed, 13 Aug 2025 05:26:29 +0000",
+  "direction": "outbound-api",
+  "error_code": null,
+  "error_message": null,
+  "from": "whatsapp:+14155238886",
+  "messaging_service_sid": null,
+  "num_media": "0",
+  "num_segments": "1",
+  "price": null,
+  "price_unit": null,
+  "sid": "MM4a0b30f104e83424a95b98f2bfd48428",
+  "status": "queued",
+  "subresource_uris": {
+    "media": "/2010-04-01/Accounts/ACfcb28f14d615732cef0bf699e1a5ae14/Messages/MM4a0b30f104e83424a95b98f2bfd48428/Media.json"
+  },
+  "to": "whatsapp:+393792787795",
+  "uri": "/2010-04-01/Accounts/ACfcb28f14d615732cef0bf699e1a5ae14/Messages/MM4a0b30f104e83424a95b98f2bfd48428.json"
+}
