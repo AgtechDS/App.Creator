@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import Stripe from "stripe";
-import { storage } from "./storage";
+import { storage } from "../../server/storage";
 import { insertOrderSchema } from "@shared/schema";
 import { z } from "zod";
 import sgMail from "@sendgrid/mail";
