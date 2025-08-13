@@ -48,8 +48,7 @@ app.use((req, res, next) => {
     throw err;
   });
 
-  
-}  serveStatic(app);
+  serveStatic(app);
 })();
 
 export default app;
