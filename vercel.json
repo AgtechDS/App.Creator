@@ -5,9 +5,9 @@
       "use": "@vercel/node"
     },
     {
-      "src": "vite.config.ts",
-      "use": "@vercel/vite",
-      "config": { "outputDirectory": "dist/public" }
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "dist/public" }
     }
   ],
   "routes": [
