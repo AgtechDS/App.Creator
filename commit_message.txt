@@ -1,0 +1,3 @@
+fix: Use @vercel/static-build for client and update .gitignore
+
+Corrected vercel.json to use @vercel/static-build for the client application, as @vercel/vite is not a valid builder. Also, updated .gitignore to include .vercel directory.
