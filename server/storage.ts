@@ -126,6 +126,7 @@ export class MemStorage implements IStorage {
       id,
       notes: insertOrder.notes || null,
       customerEmail: insertOrder.customerEmail || null,
+      status: insertOrder.status || "pending",
       stripePaymentIntentId: null,
       createdAt: new Date(),
     };
