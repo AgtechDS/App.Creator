@@ -49,7 +49,7 @@ app.use((req, res, next) => {
   });
 
   
-}  serveStatic(app);
+   serveStatic(app);
 })();
 
 export default app;
