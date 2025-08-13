@@ -5,8 +5,9 @@
       "use": "@vercel/node"
     },
     {
-      "src": "client/vite.config.ts",
-      "use": "@vercel/vite"
+      "src": "vite.config.ts",
+      "use": "@vercel/vite",
+      "config": { "outputDirectory": "dist/public" }
     }
   ],
   "routes": [
@@ -16,7 +17,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/client/$1"
+      "dest": "/dist/public/$1"
     }
   ]
 }
