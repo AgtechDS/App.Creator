@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ristorante Bella Vista - Menu Online con Delivery</title>
+    <meta name="description" content="Ordina online dal Ristorante Bella Vista. Menu tradizionale italiano, delivery veloce, pagamento sicuro con Stripe.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF6B35',
+                        secondary: '#2C3E50',
+                        accent: '#28A745'
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- @COMPONENT: Header -->
+    <header class="bg-white shadow-lg fixed top-0 left-0 right-0 z-50">
+        <nav class="container mx-auto px-4 py-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-utensils text-primary text-2xl"></i>
+                    <h1 class="text-xl font-bold text-secondary">Bella Vista</h1>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#home" class="text-secondary hover:text-primary transition-colors">Home</a>
+                    <a href="#menu" class="text-secondary hover:text-primary transition-colors">Menu</a>
+                    <a href="#about" class="text-secondary hover:text-primary transition-colors">Chi Siamo</a>
+                    <a href="#contact" class="text-secondary hover:text-primary transition-colors">Contatti</a>
+                </div>
+
+                <div class="flex items-center space-x-3">
+                    <button id="cartToggle" class="relative bg-primary text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors">
+                        <i class="fas fa-shopping-cart mr-2"></i>
+                        <span class="hidden sm:inline">Carrello</span>
+                        <span id="cartCount" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 text-xs flex items-center justify-center font-bold">0</span>
+                    </button>
+                    
+                    <button class="md:hidden text-secondary">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <!-- @END_COMPONENT: Header -->
+
+    <main class="pt-16">
+        <!-- @COMPONENT: Hero Section -->
+        <section id="home" class="relative h-screen flex items-center justify-center overflow-hidden">
+            <!-- A warm, inviting Italian restaurant interior with wooden tables and ambient lighting -->
+            <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" 
+                 style="background-image: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&h=1080');">
+                <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+            </div>
+            
+            <div class="relative text-center text-white px-4 max-w-4xl mx-auto">
+                <h2 class="text-4xl md:text-6xl font-bold mb-6">Autentica Cucina Italiana</h2>
+                <p class="text-xl md:text-2xl mb-8 opacity-90">Tradizione, qualità e sapori unici direttamente a casa tua</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="#menu" class="bg-primary hover:bg-opacity-90 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors">
+                        <i class="fas fa-utensils mr-2"></i>Vedi Menu
+                    </a>
+                    <a href="#contact" class="border-2 border-white text-white hover:bg-white hover:text-secondary px-8 py-4 rounded-lg text-lg font-semibold transition-colors">
+                        <i class="fas fa-phone mr-2"></i>Ordina Ora
+                    </a>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: Hero Section -->
+
+        <!-- @COMPONENT: Featured Offers -->
+        <section class="py-16 bg-white">
+            <div class="container mx-auto px-4">
+                <h3 class="text-3xl font-bold text-center text-secondary mb-12">Offerte Speciali</h3>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="bg-gradient-to-br from-primary to-orange-600 rounded-xl p-6 text-white transform hover:scale-105 transition-transform">
+                        <i class="fas fa-percentage text-3xl mb-4"></i>
+                        <h4 class="text-xl font-bold mb-2">Sconto 20%</h4>
+                        <p class="mb-4">Su ordini superiori a €25</p>
+                        <p class="text-sm opacity-90">Valido fino al 31/12</p>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-accent to-green-600 rounded-xl p-6 text-white transform hover:scale-105 transition-transform">
+                        <i class="fas fa-truck text-3xl mb-4"></i>
+                        <h4 class="text-xl font-bold mb-2">Delivery Gratuito</h4>
+                        <p class="mb-4">Per ordini sopra i €15</p>
+                        <p class="text-sm opacity-90">Zona centro città</p>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-secondary to-blue-800 rounded-xl p-6 text-white transform hover:scale-105 transition-transform">
+                        <i class="fas fa-clock text-3xl mb-4"></i>
+                        <h4 class="text-xl font-bold mb-2">Menu del Giorno</h4>
+                        <p class="mb-4">Primi + Secondi a €12</p>
+                        <p class="text-sm opacity-90">Dal lunedì al venerdì</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: Featured Offers -->
+
+        <!-- @COMPONENT: Menu Section -->
+        <section id="menu" class="py-16 bg-gray-50">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold text-secondary mb-4">Il Nostro Menu</h3>
+                    <p class="text-gray-600 max-w-2xl mx-auto">Scopri la nostra selezione di piatti tradizionali italiani, preparati con ingredienti freschi e di qualità</p>
+                </div>
+
+                <!-- Category Filters -->
+                <div class="flex flex-wrap justify-center gap-3 mb-8">
+                    <button class="category-filter active bg-primary text-white px-6 py-2 rounded-full font-medium transition-colors" data-category="all">
+                        Tutti
+                    </button>
+                    <button class="category-filter bg-white text-secondary px-6 py-2 rounded-full font-medium hover:bg-primary hover:text-white transition-colors" data-category="bevande">
+                        Bevande
+                    </button>
+                    <button class="category-filter bg-white text-secondary px-6 py-2 rounded-full font-medium hover:bg-primary hover:text-white transition-colors" data-category="panini">
+                        Panini
+                    </button>
+                    <button class="category-filter bg-white text-secondary px-6 py-2 rounded-full font-medium hover:bg-primary hover:text-white transition-colors" data-category="dolci">
+                        Dolci
+                    </button>
+                    <button class="category-filter bg-white text-secondary px-6 py-2 rounded-full font-medium hover:bg-primary hover:text-white transition-colors" data-category="primi">
+                        Primi Piatti
+                    </button>
+                </div>
+
+                <!-- Menu Items Grid -->
+                <div id="menuGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <!-- Menu Item 1 -->
+                    <div class="menu-item bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow" data-category="bevande">
+                        <!-- Rich, aromatic espresso in a classic white cup with coffee beans scattered around -->
+                        <img src="https://pixabay.com/get/g842481386d08ffb385b039a8b2d794728c21e8db8a7af8b4d8ce6cfb73bd4688c35f4949a21801a96b544ae110bec6cb_1280.jpg" alt="Caffè Espresso" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h4 class="font-bold text-secondary mb-2">Caffè Espresso</h4>
+                            <p class="text-gray-600 text-sm mb-3">Classico espresso italiano</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-primary font-bold text-lg">€1,00</span>
+                                <button class="add-to-cart bg-primary text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors" 
+                                        data-name="Caffè Espresso" data-price="1.00" data-image="https://images.unsplash.com/photo-1510707577719-ae7c14805e76?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300">
+                                    <i class="fas fa-plus mr-1"></i>Aggiungi
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Menu Item 2 -->
+                    <div class="menu-item bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow" data-category="bevande">
+                        <!-- Creamy cappuccino with beautiful latte art in a ceramic cup on a wooden table -->
+                        <img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300" alt="Cappuccino" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h4 class="font-bold text-secondary mb-2">Cappuccino</h4>
+                            <p class="text-gray-600 text-sm mb-3">Con latte caldo e schiuma</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-primary font-bold text-lg">€1,50</span>
+                                <button class="add-to-cart bg-primary text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors" 
+                                        data-name="Cappuccino" data-price="1.50" data-image="https://images.unsplash.com/photo-1572442388796-11668a67e53d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300">
+                                    <i class="fas fa-plus mr-1"></i>Aggiungi
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Menu Item 3 -->
+                    <div class="menu-item bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow" data-category="panini">
+                        <!-- Artisanal Italian sandwich with prosciutto and cheese on rustic bread -->
+                        <img src="https://images.unsplash.com/photo-1539252554453-80ab65ce3586?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300" alt="Panino Prosciutto e Formaggio" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h4 class="font-bold text-secondary mb-2">Panino Prosciutto e Formaggio</h4>
+                            <p class="text-gray-600 text-sm mb-3">Pane fresco con prosciutto cotto e formaggio</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-primary font-bold text-lg">€4,00</span>
+                                <button class="add-to-cart bg-primary text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors" 
+                                        data-name="Panino Prosciutto e Formaggio" data-price="4.00" data-image="https://images.unsplash.com/photo-1539252554453-80ab65ce3586?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300">
+                                    <i class="fas fa-plus mr-1"></i>Aggiungi
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Menu Item 4 -->
+                    <div class="menu-item bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow" data-category="dolci">
+                        <!-- Homemade Italian cake slice with fresh berries and powdered sugar on elegant plate -->
+                        <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300" alt="Torta della Casa" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h4 class="font-bold text-secondary mb-2">Torta della Casa</h4>
+                            <p class="text-gray-600 text-sm mb-3">Dolce fatto in casa con ingredienti freschi</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-primary font-bold text-lg">€3,50</span>
+                                <button class="add-to-cart bg-primary text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors" 
+                                        data-name="Torta della Casa" data-price="3.50" data-image="https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300">
+                                    <i class="fas fa-plus mr-1"></i>Aggiungi
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Menu Item 5 -->
+                    <div class="menu-item bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow" data-category="bevande">
+                        <!-- Refreshing assorted soft drinks in bottles with ice and lime garnish -->
+                        <img src="https://images.unsplash.com/photo-1544145945-f90425340c7e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300" alt="Bibita Gassata" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h4 class="font-bold text-secondary mb-2">Bibita Gassata</h4>
+                            <p class="text-gray-600 text-sm mb-3">Scelta tra Coca-Cola, Fanta, Sprite</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-primary font-bold text-lg">€2,00</span>
+                                <button class="add-to-cart bg-primary text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors" 
+                                        data-name="Bibita Gassata" data-price="2.00" data-image="https://images.unsplash.com/photo-1544145945-f90425340c7e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300">
+                                    <i class="fas fa-plus mr-1"></i>Aggiungi
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Menu Item 6 -->
+                    <div class="menu-item bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow" data-category="primi">
+                        <!-- Traditional Italian pasta dish with tomato sauce and fresh basil in rustic bowl -->
+                        <img src="https://images.unsplash.com/photo-1551183053-bf91a1d81141?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300" alt="Spaghetti alla Marinara" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h4 class="font-bold text-secondary mb-2">Spaghetti alla Marinara</h4>
+                            <p class="text-gray-600 text-sm mb-3">Con pomodoro fresco e basilico</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-primary font-bold text-lg">€8,50</span>
+                                <button class="add-to-cart bg-primary text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors" 
+                                        data-name="Spaghetti alla Marinara" data-price="8.50" data-image="https://images.unsplash.com/photo-1551183053-bf91a1d81141?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300">
+                                    <i class="fas fa-plus mr-1"></i>Aggiungi
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Menu Item 7 -->
+                    <div class="menu-item bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow" data-category="primi">
+                        <!-- Creamy risotto with mushrooms served in an elegant white bowl with fresh herbs -->
+                        <img src="https://images.unsplash.com/photo-1476124369491-e7addf5db371?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300" alt="Risotto ai Funghi" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h4 class="font-bold text-secondary mb-2">Risotto ai Funghi</h4>
+                            <p class="text-gray-600 text-sm mb-3">Cremoso risotto con funghi porcini</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-primary font-bold text-lg">€10,00</span>
+                                <button class="add-to-cart bg-primary text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors" 
+                                        data-name="Risotto ai Funghi" data-price="10.00" data-image="https://images.unsplash.com/photo-1476124369491-e7addf5db371?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300">
+                                    <i class="fas fa-plus mr-1"></i>Aggiungi
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Menu Item 8 -->
+                    <div class="menu-item bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow" data-category="dolci">
+                        <!-- Classic Italian tiramisu with cocoa powder dusting on elegant white plate -->
+                        <img src="https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300" alt="Tiramisù" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h4 class="font-bold text-secondary mb-2">Tiramisù</h4>
+                            <p class="text-gray-600 text-sm mb-3">Il classico dolce al cucchiaio italiano</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-primary font-bold text-lg">€4,50</span>
+                                <button class="add-to-cart bg-primary text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors" 
+                                        data-name="Tiramisù" data-price="4.50" data-image="https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=300">
+                                    <i class="fas fa-plus mr-1"></i>Aggiungi
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: Menu Section -->
+
+        <!-- @COMPONENT: About Section -->
+        <section id="about" class="py-16 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h3 class="text-3xl font-bold text-secondary mb-6">Chi Siamo</h3>
+                        <p class="text-gray-600 mb-6 leading-relaxed">
+                            Dal 1985, il Ristorante Bella Vista è sinonimo di tradizione culinaria italiana. 
+                            La nostra famiglia porta avanti ricette trammandate di generazione in generazione, 
+                            utilizzando solo ingredienti freschi e di qualità.
+                        </p>
+                        <p class="text-gray-600 mb-6 leading-relaxed">
+                            Oggi, con il nostro servizio di delivery, portiamo l'autentico sapore italiano 
+                            direttamente a casa vostra, mantenendo intatta la qualità e la cura di sempre.
+                        </p>
+                        <div class="flex items-center space-x-6">
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-primary">38+</div>
+                                <div class="text-sm text-gray-600">Anni di esperienza</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-primary">5000+</div>
+                                <div class="text-sm text-gray-600">Clienti soddisfatti</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-primary">4.8★</div>
+                                <div class="text-sm text-gray-600">Rating medio</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:order-first">
+                        <!-- Traditional Italian chef preparing fresh pasta in a professional kitchen -->
+                        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600" 
+                             alt="Chef preparando pasta fresca" 
+                             class="rounded-xl shadow-lg w-full h-auto">
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: About Section -->
+
+        <!-- @COMPONENT: Contact Section -->
+        <section id="contact" class="py-16 bg-gray-50">
+            <div class="container mx-auto px-4">
+                <h3 class="text-3xl font-bold text-center text-secondary mb-12">Contatti e Dove Siamo</h3>
+                
+                <div class="grid lg:grid-cols-2 gap-12">
+                    <div>
+                        <div class="bg-white rounded-xl p-8 shadow-lg">
+                            <h4 class="text-xl font-bold text-secondary mb-6">Informazioni di Contatto</h4>
+                            
+                            <div class="space-y-4">
+                                <div class="flex items-center space-x-4">
+                                    <i class="fas fa-phone text-primary text-xl w-6"></i>
+                                    <div>
+                                        <div class="font-semibold">Telefono</div>
+                                        <div class="text-gray-600">+39 06 1234 5678</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center space-x-4">
+                                    <i class="fas fa-envelope text-primary text-xl w-6"></i>
+                                    <div>
+                                        <div class="font-semibold">Email</div>
+                                        <div class="text-gray-600">info@bellavista.it</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center space-x-4">
+                                    <i class="fas fa-map-marker-alt text-primary text-xl w-6"></i>
+                                    <div>
+                                        <div class="font-semibold">Indirizzo</div>
+                                        <div class="text-gray-600">Via Roma 123, 00100 Roma</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center space-x-4">
+                                    <i class="fas fa-clock text-primary text-xl w-6"></i>
+                                    <div>
+                                        <div class="font-semibold">Orari</div>
+                                        <div class="text-gray-600">Lun-Dom: 11:00 - 23:00</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-8 pt-6 border-t border-gray-200">
+                                <h5 class="font-semibold mb-4">Zona di Delivery</h5>
+                                <p class="text-gray-600 text-sm">
+                                    Consegniamo in tutta la zona centro di Roma. 
+                                    Delivery gratuito per ordini superiori a €15.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="bg-white rounded-xl overflow-hidden shadow-lg h-full">
+                            <!-- Google Maps embedded view showing restaurant location in Rome -->
+                            <div class="w-full h-96 bg-gray-200 flex items-center justify-center">
+                                <div class="text-center text-gray-500">
+                                    <i class="fas fa-map-marked-alt text-4xl mb-2"></i>
+                                    <p>Mappa Google Maps</p>
+                                    <p class="text-sm">Via Roma 123, Roma</p>
+                                </div>
+                            </div>
+                            <!-- TODO: Integrate Google Maps API -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: Contact Section -->
+    </main>
+
+    <!-- @COMPONENT: Shopping Cart Modal -->
+    <div id="cartModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="fixed right-0 top-0 h-full w-full max-w-md bg-white shadow-xl transform translate-x-full transition-transform duration-300" id="cartSidebar">
+            <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="text-xl font-bold text-secondary">Il Tuo Carrello</h3>
+                <button id="closeCart" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div id="cartItems" class="flex-1 overflow-y-auto p-4 space-y-4">
+                <!-- Cart items will be dynamically added here -->
+                <div class="text-center text-gray-500 py-8" id="emptyCart">
+                    <i class="fas fa-shopping-cart text-4xl mb-4"></i>
+                    <p>Il carrello è vuoto</p>
+                    <p class="text-sm">Aggiungi alcuni prodotti dal menu</p>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-200 p-4">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="font-bold text-lg">Totale:</span>
+                    <span id="cartTotal" class="font-bold text-lg text-primary">€0,00</span>
+                </div>
+                <button id="checkoutBtn" class="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed" disabled>
+                    <i class="fas fa-credit-card mr-2"></i>Procedi al Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: Shopping Cart Modal -->
+
+    <!-- @COMPONENT: Checkout Modal -->
+    <div id="checkoutModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="fixed inset-4 bg-white rounded-lg shadow-xl overflow-y-auto">
+            <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="text-2xl font-bold text-secondary">Checkout</h3>
+                <button id="closeCheckout" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="p-6">
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <!-- Order Summary -->
+                    <div>
+                        <h4 class="text-lg font-bold mb-4">Riepilogo Ordine</h4>
+                        <div id="checkoutItems" class="space-y-3 mb-4">
+                            <!-- Order items will be populated here -->
+                        </div>
+                        <div class="border-t pt-4">
+                            <div class="flex justify-between font-bold text-lg">
+                                <span>Totale:</span>
+                                <span id="checkoutTotal" class="text-primary">€0,00</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Customer Information Form -->
+                    <div>
+                        <h4 class="text-lg font-bold mb-4">Dati di Consegna</h4>
+                        <form id="checkoutForm" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Nome Completo *</label>
+                                <input type="text" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Mario Rossi">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Telefono *</label>
+                                <input type="tel" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="+39 123 456 7890">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                <input type="email" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="mario@email.com">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Indirizzo di Consegna *</label>
+                                <input type="text" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Via Roma 123">
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">CAP *</label>
+                                    <input type="text" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="00100">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Città *</label>
+                                    <input type="text" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Roma">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Note (opzionale)</label>
+                                <textarea class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" rows="3" placeholder="Istruzioni speciali per la consegna..."></textarea>
+                            </div>
+                            
+                            <div class="pt-4">
+                                <button type="submit" class="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-colors">
+                                    <i class="fas fa-credit-card mr-2"></i>Paga con Stripe
+                                </button>
+                                <p class="text-xs text-gray-500 mt-2 text-center">
+                                    Pagamento sicuro elaborato da Stripe
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: Checkout Modal -->
+
+    <!-- @COMPONENT: Success Toast -->
+    <div id="successToast" class="fixed top-20 right-4 bg-accent text-white px-6 py-3 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 z-50">
+        <div class="flex items-center space-x-2">
+            <i class="fas fa-check-circle"></i>
+            <span>Prodotto aggiunto al carrello!</span>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: Success Toast -->
+
+    <!-- @COMPONENT: Footer -->
+    <footer class="bg-secondary text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fas fa-utensils text-primary text-2xl"></i>
+                        <h4 class="text-xl font-bold">Bella Vista</h4>
+                    </div>
+                    <p class="text-gray-300 text-sm">
+                        Autentica cucina italiana dal 1985. 
+                        Tradizione e qualità in ogni piatto.
+                    </p>
+                </div>
+                
+                <div>
+                    <h5 class="font-bold mb-4">Link Utili</h5>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#menu" class="text-gray-300 hover:text-primary transition-colors">Menu</a></li>
+                        <li><a href="#about" class="text-gray-300 hover:text-primary transition-colors">Chi Siamo</a></li>
+                        <li><a href="#contact" class="text-gray-300 hover:text-primary transition-colors">Contatti</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-primary transition-colors">Termini e Condizioni</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h5 class="font-bold mb-4">Orari</h5>
+                    <div class="text-sm text-gray-300 space-y-1">
+                        <div>Lunedì - Domenica</div>
+                        <div>11:00 - 23:00</div>
+                        <div class="pt-2 text-primary">Delivery attivo</div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h5 class="font-bold mb-4">Seguici</h5>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-primary transition-colors">
+                            <i class="fab fa-facebook text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-primary transition-colors">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-primary transition-colors">
+                            <i class="fab fa-whatsapp text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-600 mt-8 pt-8 text-center text-sm text-gray-300">
+                <p>&copy; 2024 Ristorante Bella Vista. Tutti i diritti riservati.</p>
+            </div>
+        </div>
+    </footer>
+    <!-- @END_COMPONENT: Footer -->
+
+    <script>
+        (function() {
+            // @STATE: cart:array = []
+            let cart = [];
+            let cartTotal = 0;
+
+            // DOM Elements
+            const cartToggle = document.getElementById('cartToggle');
+            const cartModal = document.getElementById('cartModal');
+            const cartSidebar = document.getElementById('cartSidebar');
+            const closeCart = document.getElementById('closeCart');
+            const cartCount = document.getElementById('cartCount');
+            const cartItems = document.getElementById('cartItems');
+            const cartTotalEl = document.getElementById('cartTotal');
+            const emptyCart = document.getElementById('emptyCart');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            const checkoutModal = document.getElementById('checkoutModal');
+            const closeCheckout = document.getElementById('closeCheckout');
+            const checkoutForm = document.getElementById('checkoutForm');
+            const successToast = document.getElementById('successToast');
+
+            // Category Filtering
+            const categoryFilters = document.querySelectorAll('.category-filter');
+            const menuItems = document.querySelectorAll('.menu-item');
+
+            categoryFilters.forEach(filter => {
+                filter.addEventListener('click', function() {
+                    const category = this.dataset.category;
+                    
+                    // Update active filter
+                    categoryFilters.forEach(f => {
+                        f.classList.remove('active', 'bg-primary', 'text-white');
+                        f.classList.add('bg-white', 'text-secondary');
+                    });
+                    this.classList.add('active', 'bg-primary', 'text-white');
+                    this.classList.remove('bg-white', 'text-secondary');
+                    
+                    // Filter menu items
+                    menuItems.forEach(item => {
+                        if (category === 'all' || item.dataset.category === category) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // Cart Functionality
+            function updateCartDisplay() {
+                cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+                cartTotalEl.textContent = `€${cartTotal.toFixed(2)}`;
+                
+                if (cart.length === 0) {
+                    emptyCart.style.display = 'block';
+                    checkoutBtn.disabled = true;
+                    cartItems.querySelectorAll('.cart-item').forEach(item => item.remove());
+                } else {
+                    emptyCart.style.display = 'none';
+                    checkoutBtn.disabled = false;
+                }
+            }
+
+            function addToCart(name, price, image) {
+                const existingItem = cart.find(item => item.name === name);
+                
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cart.push({
+                        name,
+                        price: parseFloat(price),
+                        image,
+                        quantity: 1
+                    });
+                }
+                
+                cartTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                updateCartDisplay();
+                renderCartItems();
+                showSuccessToast();
+            }
+
+            function removeFromCart(name) {
+                cart = cart.filter(item => item.name !== name);
+                cartTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                updateCartDisplay();
+                renderCartItems();
+            }
+
+            function updateQuantity(name, newQuantity) {
+                const item = cart.find(item => item.name === name);
+                if (item) {
+                    if (newQuantity <= 0) {
+                        removeFromCart(name);
+                    } else {
+                        item.quantity = newQuantity;
+                        cartTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                        updateCartDisplay();
+                        renderCartItems();
+                    }
+                }
+            }
+
+            function renderCartItems() {
+                const existingItems = cartItems.querySelectorAll('.cart-item');
+                existingItems.forEach(item => item.remove());
+                
+                cart.forEach(item => {
+                    const cartItemEl = document.createElement('div');
+                    cartItemEl.className = 'cart-item bg-gray-50 rounded-lg p-3 flex items-center space-x-3';
+                    cartItemEl.innerHTML = `
+                        <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-lg">
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-sm">${item.name}</h4>
+                            <p class="text-primary font-bold">€${item.price.toFixed(2)}</p>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button class="quantity-btn bg-gray-200 w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-300" data-action="decrease" data-name="${item.name}">
+                                <i class="fas fa-minus text-xs"></i>
+                            </button>
+                            <span class="font-semibold w-8 text-center">${item.quantity}</span>
+                            <button class="quantity-btn bg-gray-200 w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-300" data-action="increase" data-name="${item.name}">
+                                <i class="fas fa-plus text-xs"></i>
+                            </button>
+                        </div>
+                        <button class="remove-btn text-red-500 hover:text-red-700" data-name="${item.name}">
+                            <i class="fas fa-trash text-sm"></i>
+                        </button>
+                    `;
+                    cartItems.appendChild(cartItemEl);
+                });
+
+                // Add event listeners for quantity buttons and remove buttons
+                cartItems.querySelectorAll('.quantity-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const name = this.dataset.name;
+                        const action = this.dataset.action;
+                        const item = cart.find(item => item.name === name);
+                        
+                        if (item) {
+                            if (action === 'increase') {
+                                updateQuantity(name, item.quantity + 1);
+                            } else {
+                                updateQuantity(name, item.quantity - 1);
+                            }
+                        }
+                    });
+                });
+
+                cartItems.querySelectorAll('.remove-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        removeFromCart(this.dataset.name);
+                    });
+                });
+            }
+
+            function showSuccessToast() {
+                successToast.classList.remove('translate-x-full');
+                setTimeout(() => {
+                    successToast.classList.add('translate-x-full');
+                }, 3000);
+            }
+
+            function openCart() {
+                cartModal.classList.remove('hidden');
+                setTimeout(() => {
+                    cartSidebar.classList.remove('translate-x-full');
+                }, 10);
+            }
+
+            function closeCartModal() {
+                cartSidebar.classList.add('translate-x-full');
+                setTimeout(() => {
+                    cartModal.classList.add('hidden');
+                }, 300);
+            }
+
+            function openCheckout() {
+                // Populate checkout items
+                const checkoutItems = document.getElementById('checkoutItems');
+                const checkoutTotal = document.getElementById('checkoutTotal');
+                
+                checkoutItems.innerHTML = '';
+                cart.forEach(item => {
+                    const itemEl = document.createElement('div');
+                    itemEl.className = 'flex justify-between items-center';
+                    itemEl.innerHTML = `
+                        <span>${item.name} x${item.quantity}</span>
+                        <span>€${(item.price * item.quantity).toFixed(2)}</span>
+                    `;
+                    checkoutItems.appendChild(itemEl);
+                });
+                
+                checkoutTotal.textContent = `€${cartTotal.toFixed(2)}`;
+                
+                closeCartModal();
+                checkoutModal.classList.remove('hidden');
+            }
+
+            function closeCheckoutModal() {
+                checkoutModal.classList.add('hidden');
+            }
+
+            // Event Listeners
+            cartToggle.addEventListener('click', openCart);
+            closeCart.addEventListener('click', closeCartModal);
+            checkoutBtn.addEventListener('click', openCheckout);
+            closeCheckout.addEventListener('click', closeCheckoutModal);
+
+            // Close modals when clicking outside
+            cartModal.addEventListener('click', function(e) {
+                if (e.target === cartModal) {
+                    closeCartModal();
+                }
+            });
+
+            checkoutModal.addEventListener('click', function(e) {
+                if (e.target === checkoutModal) {
+                    closeCheckoutModal();
+                }
+            });
+
+            // Add to cart buttons
+            document.querySelectorAll('.add-to-cart').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const name = this.dataset.name;
+                    const price = this.dataset.price;
+                    const image = this.dataset.image;
+                    addToCart(name, price, image);
+                });
+            });
+
+            // Checkout form submission
+            checkoutForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // TODO: Implement Stripe payment processing
+                // This would integrate with Stripe's JavaScript SDK
+                alert('Integrazione Stripe: In una vera implementazione, qui verrebbe creata una sessione di pagamento Stripe e l\'utente verrebbe reindirizzato al checkout sicuro.');
+                
+                // Simulate successful payment
+                setTimeout(() => {
+                    alert('Pagamento completato con successo! Il tuo ordine è stato confermato.');
+                    cart = [];
+                    cartTotal = 0;
+                    updateCartDisplay();
+                    closeCheckoutModal();
+                }, 1000);
+            });
+
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Initialize cart display
+            updateCartDisplay();
+        })();
+    </script>
+</body>
+</html>
