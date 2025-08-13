@@ -1,7 +1,7 @@
 import "dotenv/config";
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
-import { serveStatic, log } from "./vite";
+import { log } from "./vite";
 
 const app = express();
 app.use(express.json());
@@ -48,7 +48,7 @@ app.use((req, res, next) => {
     throw err;
   });
 
-  serveStatic(app);
+  
 })();
 
 export default app;
